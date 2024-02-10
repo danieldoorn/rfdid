@@ -18,21 +18,21 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 song_uris = []
 
 try:
-    print("Hold a tag near the reader")
     while True:
+        print("Hold a tag near the reader")
         id, text = reader.read()
         print("ID: %s\nText: %s" % (id, text))
-        
+
         # Prompt user to enter song URL
         song_url = input("Enter the song URL: ")
-        
+
         # Extract song URI from URL
         song_id = song_url.split('/')[-1]
         song_uri = f"spotify:track:{song_id}"
-        
+
         # Add song URI to list
         song_uris.append(song_uri)
-        
+
         # Ask if user wants to add more songs
         add_more = input("Do you want to add more songs? (y/n): ")
         if add_more.lower() != 'y':
@@ -40,7 +40,7 @@ try:
 
     # Play the playlist on Spotify
     sp.start_playback(device_id=device_id, uris=song_uris)
-    
+
 except KeyboardInterrupt:
     print("Execution interrupted by user.")
 finally:
