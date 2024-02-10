@@ -1,47 +1,12 @@
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from mfrc522 import SimpleMFRC522
 
 # Set up RFID/NFC reader
 reader = SimpleMFRC522()
-
-# Set up Spotify API credentials
-client_id = 'your_client_id'
-client_secret = 'your_client_secret'
-device_id = 'your_device_id'
-
-# Authenticate with Spotify API
-client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-
-# Initialize list to store song URIs
-song_uris = []
 
 try:
     while True:
         print("Hold a tag near the reader")
         id, text = reader.read()
         print("ID: %s\nText: %s" % (id, text))
-
-        # Prompt user to enter song URL
-        song_url = input("Enter the song URL: ")
-
-        # Extract song URI from URL
-        song_id = song_url.split('/')[-1]
-        song_uri = f"spotify:track:{song_id}"
-
-        # Add song URI to list
-        song_uris.append(song_uri)
-
-        # Ask if user wants to add more songs
-        add_more = input("Do you want to add more songs? (y/n): ")
-        if add_more.lower() != 'y':
-            break
-
-    # Play the playlist on Spotify
-    sp.start_playback(device_id=device_id, uris=song_uris)
-
-except KeyboardInterrupt:
-    print("Execution interrupted by user.")
 finally:
     GPIO.cleanup()
